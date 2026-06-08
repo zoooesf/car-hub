@@ -1,14 +1,16 @@
 import { CarProps, FilterProps } from "@/types";
+import carsData from "@/constants/carsData";
 
-export async function fetchCars( filters:FilterProps){
-  const {manufacturer, year, model, fuel} = filters;
-  const headers = {
-		'X-RapidAPI-Key': process.env.RAPIDAPI_KEY || '',
-		'X-RapidAPI-Host': 'cars-by-api-ninjas.p.rapidapi.com'
-	}
-  const response = await fetch(`https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?make=${manufacturer}&year=${year}&model=${model}&fuel_type=${fuel}`,{headers:headers});
-  const result = await response.json();
-  return result
+export async function fetchCars(filters: FilterProps): Promise<CarProps[]> {
+  const { manufacturer, year, model, fuel } = filters;
+
+  return carsData.filter((car) => {
+    if (manufacturer && !car.make.toLowerCase().includes(manufacturer.toLowerCase())) return false;
+    if (year && car.year !== Number(year)) return false;
+    if (model && !car.model.toLowerCase().includes(model.toLowerCase())) return false;
+    if (fuel && car.fuel_type.toLowerCase() !== fuel.toLowerCase()) return false;
+    return true;
+  });
 };
 export const calculateCarRent = (city_mpg: number, year:number)=>{
   const basePricePerDay = 50; //base rental price per day in dollars

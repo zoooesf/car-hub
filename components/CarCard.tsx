@@ -62,7 +62,7 @@ const CarCard = ({car}:CarCardProps) => {
                 alt="gas"
               />
               <p className="text-[14px]">
-                {mpg !== null ? `${mpg}MPG` : 'N/A'}
+                {city_mpg}MPG
               </p>
             </div>
           </div>
